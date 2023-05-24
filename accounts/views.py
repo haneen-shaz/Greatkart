@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .forms import RegistrationForm,UserForm,UserProfileForm
-from .models import Account,UserProfile
-from orders.models import Order
+# from .forms import RegistrationForm,UserForm,UserProfileForm
+from .models import Account,UserProfile,Address
+from orders.models import Order, OrderProduct
 from django.contrib.auth.decorators import login_required
 from django.contrib import  messages,auth
 
@@ -16,6 +16,7 @@ from django.core.mail import EmailMessage
 
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
+from store.models import Product
 # import requests
 
 
@@ -25,46 +26,37 @@ from carts.models import Cart, CartItem
 
 def register(request):
     if request.method == 'POST':
-    
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        password = request.POST['password']
+        username = email.split("@")[0]
+        user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
+        user.phone  = phone
+        user.save()
 
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            phone = form.cleaned_data['phone']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            username = email.split("@")[0]
-            user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
-            user.phone  = phone
-            user.save()
+        # Create a user profile
+        profile = UserProfile()
+        profile.user_id = user.id
+        profile.profile_picture = 'default/default-user.png'
+        profile.save()
 
-            # Create a user profile
-            profile = UserProfile()
-            profile.user_id = user.id
-            profile.profile_picture = 'default/default-user.png'
-            profile.save()
-
-     # USER ACTIVATION
-            current_site = get_current_site(request)
-            mail_subject = 'Please activate your account'
-            message = render_to_string('accounts/account_email_verification.html', {
-                'user': user,
-                'domain': current_site,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user),
-            })
-            to_email = email
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
-            send_email.send()
-            # messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
-            return redirect('/accounts/login/?command=verification&email='+email)
-    else:
-          form = RegistrationForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'accounts/register.html', context)
+    # USER ACTIVATION
+        current_site = get_current_site(request)
+        mail_subject = 'Please activate your account'
+        message = render_to_string('accounts/account_email_verification.html', {
+            'user': user,
+            'domain': current_site,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': default_token_generator.make_token(user),
+        })
+        to_email = email
+        send_email = EmailMessage(mail_subject, message, to=[to_email])
+        send_email.send()
+        # messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
+        return redirect('/accounts/login/?command=verification&email='+email)
+    return render(request, 'accounts/register.html')
 
 def login(request):
     if request.method == 'POST':
@@ -233,5 +225,45 @@ def change_password(request):
             messages.error(request, 'Password does not match!')
             return redirect('change_password')
     return render(request, 'accounts/change_password.html')
+def addr(request):
+    if request.user.is_authenticated:
+        address=Address.objects.all()
+        return render(request,"accounts/address.html",{'address':address})
 
+def add_address(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            user = Account.objects.get(id=request.user.id)
+            print(user)
+            first_name   = request.POST['first_name']
+            last_name   = request.POST['last_name']
+            email   = request.POST['email']
+            state = request.POST['state']
+            phone = request.POST['phone']
+            address_line_1  = request.POST['address_line_1']
+            address_line_2 = request.POST['address_line_2']
+            type_address = request.POST['type_address']
+            country= request.POST['country']
+            state = request.POST['state']
+            city = request.POST['city']
+
+            address =Address.objects.create(user=user,first_name = first_name ,last_name= last_name,email= email, state=state,phone=phone,address_line_1 =address_line_1 ,address_line_2 =address_line_2 ,type_address=type_address,country=country,city=city )
+            address.save()
+
+            return redirect(edit_profile)
+        return redirect(edit_profile)
+
+def address_add_page(request):
+    if request.user.is_authenticated:
+        return render(request,"accounts/add_address.html")
     
+def returnItem(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            number = request.POST['order_number']
+            order = Order.objects.get(order_number = number)
+            order.status = "Cancelled"
+            order.save()
+            print(order.status) 
+            return render(request, 'Success.html')
+        return render(request,'accounts/returnItem.html')

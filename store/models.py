@@ -9,7 +9,6 @@ class Product(models.Model):
     description     = models.TextField(max_length=500, blank=True)
     price           = models.IntegerField()
     images          = models.ImageField(upload_to='photos/products')
-    # images1         = models.ImageField(upload_to ='photos/products')
     stock           = models.IntegerField()
     is_available    = models.BooleanField(default=True)
     category        = models.ForeignKey(category, on_delete=models.CASCADE)
@@ -19,6 +18,7 @@ class Product(models.Model):
 
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
+
 
     def __str__(self):
         return self.product_name

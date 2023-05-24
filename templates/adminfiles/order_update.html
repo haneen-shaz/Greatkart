@@ -1,0 +1,53 @@
+{%extends 'AdminBase.html'%}
+{% load static %}
+{%block content%}
+<section class="section-conten padding-y bg">
+
+<div class="container">
+	<div class="row">
+	<main class="col-md-9">
+		<article class="card mt-5">
+		<header class="card-header">
+			<strong class="d-inline-block ">Update Order</strong>
+			
+		</header>
+		<div class="card-body">
+			
+			<div class="row">
+
+			
+			<div class="col-md-12">
+				<form action="/custom_admin/order_update/{{order.id}}" method="POST">
+					{% csrf_token %}
+					
+					<div class="form-outline mb-4" style="width: 400px;">
+						<label class="form-label" for="form3Example3">Category</label>
+						<select name="status" id="inputState" class="form-control">               
+							  
+							<option value="{{order.status}}">{{order.status}}</option>
+							<option value="accepted">Accepted</option>
+							<option value="completed">Completed</option>
+							<option value="canceled">Canceled</option>
+						</select>
+					</div>    
+					
+                   
+					<button type="submit" class="btn btn-primary mt-4">Update</button>
+				</form>
+
+				</form>
+				
+			</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+
+		</article> <!-- order-group.// -->
+	</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,142 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order details</title>
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<style>
+      .searchbar{
+      margin-bottom: auto;
+      margin-top: auto;
+      height: 60px;
+      background-color: #023ab3;
+      border-radius: 30px;
+      padding: 10px;
+      }
+      .search_input{
+      color: rgb(255, 255, 255);
+      border: 0;
+      outline: 0;
+      background: none;
+      width: 0;
+      caret-color:transparent;
+      line-height: 40px;
+      transition: width 0.4s linear;
+      }
+  
+      .searchbar:hover > .search_input{
+      padding: 0 10px;
+      width: 200px;
+      caret-color:red;
+      transition: width 0.4s linear;
+      }
+  
+      .searchbar:hover > .search_icon{
+      background: rgb(255, 255, 255);
+      color: #ffffff;
+      }
+  
+      .search_icon{
+      height: 40px;
+      width: 40px;
+      float: right;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      color:rgb(255, 255, 255);
+      text-decoration:none;
+      }
+
+    
+  </style>
+<body>
+  <!-- {% csrf_token %} -->
+  <nav class="navbar navbar-expand-lg" style="background-color: rgb(77, 184, 255) ;background: linear-gradient(242deg, rgba(14,18,102,1) 0%, rgba(121,9,83,1) 100%, rgba(0,212,255,1) 100%);">
+      <a class="navbar-brand" href="admins_home" style="color: white;"> Greatkart Admin Panel</a>
+      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button> -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <!-- <a class="nav-item nav-link" style="color: white;" href="product_details">PRODUCT</a> -->
+            <a class="nav-item nav-link" style="color: white;" href="dashboard/">DASHBOARD</a>
+            <a class="nav-item nav-link" style="color: white;" href="product_details">PRODUCT</a>
+            <a class="nav-item nav-link" style="color: white;" href="category">CATEGORY</a>
+            <a class="nav-item nav-link" style="color: white;" href="order">ORDER</a>
+            <a class="nav-item nav-link" style="color: white;" href="/custom_admin/logout/">LOGOUT</a>
+            
+        </div>
+      </div>
+      <nav class="navbar navbar-light  ms-auto" >
+        <form method="post">
+           {%csrf_token%}
+            <div class="container h-100">
+              <div class="d-flex justify-content-center h-100">
+                <div class="searchbar">
+                  <input class="search_input"  type="search" name="s" placeholder="Search By First Name">
+                  <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                </div>
+              </div>
+            </div>
+        </form>
+      </nav>
+  </nav>
+  
+  <table class="table table-borderless">
+    <thead class="table-light">
+      <tr>
+        <!-- {% comment %} <th scope="col">Id</th> {% endcomment %} -->
+        <th scope="col">order no</th>
+        <th scope="col"> Name</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+        <th scope="col">Total</th>
+        <th scope="col">Address</th>
+        <th scope="col">City</th>
+        <th scope="col">Country</th>
+        <th scope="col">Status</th>
+
+        <!-- <th scope="col">Creation</th>
+        <th scope="col">Updatation</th> -->
+       
+      </tr>
+   
+    <tbody>
+        {% for dis in details %}
+      <tr class="table-light text-dark ">
+        <!-- <td></td> -->
+        <td >{{dis.order_number}}</td>
+        
+        <td>{{dis.first_name}}</td>
+        <!-- <td><img style="width: 40px; height: 40px;" src="{{dis.images.url}}"></td> -->
+        <td>{{dis.phone}}</td>
+        <td>{{dis.email}}</td>
+        <td>{{dis.order_total}}</td>
+        <td>{{dis.address}}</td>
+        <td>{{dis.city }}</td>
+        <td>{{dis.country }}</td>
+        <td>{{dis.status}}</td>
+        <div>
+          <td><button type="button" class="btn btn-danger rounded-pill px-2" ><a class="text-decoration-none text-white" href="order_delete/{{dis.id}}">Delete</a></button></td>
+          <td><button type="button" class="btn btn-primary rounded-pill px-2" ><a class="text-decoration-none text-white" href="ord_upd/{{dis.id}}">Update</a></button></td>
+        
+
+        </div>
+        {%endfor%}
+    </tbody>
+  </table>
+
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+{%extends 'base.html' %}
+{%load static %}
+{% block content %}
+<div class="row mt-3">
+    {% for item in wishlist_items %}
+    <div class="col-md-2">
+    <figure class="card card-product-grid">
+        <div class="img-wrap">
+
+            <a href="{{ item.product.get_url }}"><img src="{{ item.product.images.url }}"></a>
+
+        </div> <!-- img-wrap.// -->
+        <figcaption class="info-wrap">
+            <div class="fix-height">
+                <a href="{{ item.product.get_url }}" class="title">{{item.product.product_name }}</a>
+                <div class="price-wrap mt-2">
+                    <span class="price">$ {{ item.product.price }}</span>
+                </div> <!-- price-wrap.// -->
+            </div>
+            <a href="{% url 'add_cart' item.product.id  %}" class="btn btn-block btn-primary">add to cart </a>
+            <a href="/wishlist/remove/{{item.id}}/" class="btn btn-block btn-primary">remove from wishlist </a>
+        </figcaption>
+    </figure>
+    </div> <!-- col.// -->
+    <!-- <div>{{ item.Wishlist.product_id }}</div> -->
+    <!-- Other item details -->
+{% endfor %}
+</div>
+
+
+{% endblock %}

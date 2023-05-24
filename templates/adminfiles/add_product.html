@@ -1,0 +1,164 @@
+{%extends 'AdminBase.html'%}
+{% load static %}
+{%block content%}
+<style>
+	.headding {
+
+		position: relative;
+		width: 400px;
+		height: 36px;
+		border-bottom: 5px solid rgb(36, 42, 48);
+		overflow: hidden;
+
+	}
+
+	.headding span {
+		font-size: 23px;
+		font-family: Arial, Helvetica, sans-serif;
+		line-height: 31px;
+		background-color: rgb(36, 42, 48);
+		display: inline-block;
+		padding: 2px 20px;
+		overflow: hidden;
+		color: #ffffff;
+	}
+
+	.headding span:before {
+		position: absolute;
+		content: "";
+		width: 83%;
+		height: 100%;
+		background: rgb(36, 42, 48);
+		z-index: -1;
+		transform: rotate(45deg);
+	}
+
+	.sect {
+		width: fit-content;
+		
+		border: 1px solid rgb(36, 42, 48);
+		border-radius: 5px;
+		margin-top: 20px;
+		margin-bottom: 50px;
+		background-color: #fafafa;
+
+	}
+
+	.textarea--style-6 {
+		background: white;
+		line-height: 30px;
+		border: 1px solid #cccccc;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+		color: #666;
+		font-size: 15px;
+		-webkit-transition: all 0.4s ease;
+		-o-transition: all 0.4s ease;
+		-moz-transition: all 0.4s ease;
+		transition: all 0.4s ease;
+		padding: 0 20px;
+	}
+
+	.input-group {
+		position: relative;
+		margin: 0;
+	}
+</style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css"
+	integrity="sha512-+VDbDxc9zesADd49pfvz7CgsOl2xREI/7gnzcdyA9XjuTxLXrdpuz21VVIqc5HPfZji2CypSbxx1lgD7BgBK5g=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+   <div class="d-flex justify-content-center " style="margin-right: 440px;">
+    <nav class="navbar ">
+        <div class="headding">
+            <span>Add Products</span>
+        </div>
+    </nav>
+   </div>
+<div class="d-flex justify-content-center">
+    
+    <section class="sect d-flex justify-content-center">
+        <div class="container mt-2 p-5">    
+            <form action="new_product/" method="post"  enctype="multipart/form-data" >
+                {% csrf_token %}
+    
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline " style="width: 400px;">
+                            <label class="form-label" for="form3Example1">Product Name</label>
+                            <input type="text" name="name" id="form3Example1" class="form-control" />    
+                        </div>
+                        <div class="form-outline " style="width: 400px;">
+                            <label class="form-label" for="form3Example1">Slug</label>
+                            <input type="text" name="slug" id="form3Example1" class="form-control" />    
+                        </div>
+                        <div class="form-outline " style="width: 400px;">
+                            <label class="form-label" for="form3Example1">Product Price</label>
+                            <input type="text" name="price" id="form3Example1" class="form-control" />    
+                        </div>    
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline mb-4" style="width: 400px;">
+                            <label class="form-label" for="form3Example3">Category</label>
+                            <select name="category" id="inputState" class="form-control">                               
+                                {% for cat in category %}    
+                                <option value="{{cat.id}}">{{cat.category_name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>    
+                    </div>                    
+                </div>    
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline mb-4" style="width: 300px;">
+                            <label class="form-label" for="form3Example3">stock</label>
+    
+                            <input type="number" name="stock" id="form3Example3" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col ">
+                        <div class="form-group mb-4" style="width: 300px;">
+                            <label class="form-label" for="form3Example4">Size</label>
+                            <select name="size" id="inputState" class="form-control">
+                                <option selected>Small</option>
+                                <option>Medium</option>
+                                <option value="">Large</option>
+                                <!-- <option value="">XL</option>
+                                <option value="">XXL</option> -->
+                            </select>    
+                        </div> 
+                    </div>
+                </div>
+               
+                <div class="row mb-4">
+                    <div class="col">    
+                        <div class="form-outline mb-4 ">
+                            <label class="form-label" for="form3Example97">Images</label>
+                            <input type="file" id="myFile1" name="image" class="form-control form-control-lg" />
+                        </div>
+                    </div>   
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label class="form-label" for="form3Example4">Description</label>    
+                            <div class="value">
+                                <div class="input-group">
+                                    <textarea class="textarea--style-6" name="description"
+                                        placeholder="Description"></textarea>
+                                </div>    
+                            </div>    
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block mb-4">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+
+{%endblock%}

@@ -86,3 +86,15 @@ class UserProfile(models.Model):
 
     def full_address(self):
         return f'{self.address_line_1} {self.address_line_2}'
+class Address(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    type_address = models.CharField(max_length=50,unique=True)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=100, unique=False)
+    phone = models.CharField(max_length=50)
+    address_line_1 = models.CharField(max_length=50)
+    address_line_2 = models.CharField(max_length=50, blank=True)
+    country= models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)

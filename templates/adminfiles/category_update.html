@@ -1,0 +1,58 @@
+{%extends 'AdminBase.html'%}
+{% load static %}
+{%block content%}
+<section class="section-conten padding-y bg">
+
+<div class="container">
+	<div class="row">
+	<main class="col-md-9">
+		<article class="card mt-5">
+		<header class="card-header">
+			<strong class="d-inline-block ">Update Category</strong>
+			
+		</header>
+		<div class="card-body">
+			
+			<div class="row">
+
+			
+			<div class="col-md-12">
+				<form action="/custom_admin/cat_update/{{category.id}}" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					
+					<div class="form-group">
+						<label>Category name</label>
+                        <input type="text" name="name" placeholder="" value="{{category.category_name}}" class="form-control" >					
+					</div><br>
+					<div class="form-group">
+						<label>Slug</label>
+                        <input type="text" name="slug" placeholder="" value="{{category.slug}}" class="form-control" >					
+					</div><br>                 
+                    <div class="form-group">
+						<label>Upload Image</label>
+                        <input type="file" id="image1" name="image" class="form-control" />					
+					</div><br>
+                    <!-- <div class="form-outline mb-4 ">
+                        <label class="form-label" for="form3Example97">Images</label>
+                        <input type="file" id="myFile1" name="image" class="form-control form-control-lg" />
+                    </div>
+                    -->
+					<button type="submit" class="btn btn-primary mt-4">Update</button>
+				</form>
+
+				</form>
+				
+			</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+
+		</article> <!-- order-group.// -->
+	</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+
+{% endblock %}

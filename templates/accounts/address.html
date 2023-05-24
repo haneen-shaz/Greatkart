@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<section class="section-content padding-y bg">
+	<div class="container">
+
+		<!-- ============================ COMPONENT 1 ================================= -->
+		<h4 class="text-center mb-20">Address managment</h4>
+		<div class="row">
+
+            <aside class="col-lg-8">
+                <button type="button" class="btn btn-primary mb-2 " value="Input"><a class="text-decoration-none text-white" href="/accounts/add_address/">+Add Address</a></button>
+				{% for a in address %}
+				<div class="card mb-3">
+					<h5 class="card-header">{{a.type_address}}</h5>
+					<div class="card-body">
+						<p class="card-text mb-0">{{a.first_name}}</p>
+						<p class="card-text mb-0">{{a.address_line_1 }}</p>
+						<p class="card-text mb-0">{{a.address_line_2}}</p>
+						<p class="card-text mb-0">{{a.city}}</p>
+						<p class="card-text mb-0">{{a.state }}</p>
+					</div>
+				</div>
+				{%endfor%}
+{%endblock%}

@@ -2,6 +2,12 @@ from django.shortcuts import render,redirect
 from carts.models import Cart, CartItem
 import datetime
 from django.http import  JsonResponse
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import os
+
 
 from carts.views import _cart_id
 
@@ -46,8 +52,8 @@ def place_order(request,total=0, quantity=0,):
             data.last_name = form.cleaned_data['last_name']
             data.phone = form.cleaned_data['phone']
             data.email = form.cleaned_data['email']
-            data.address_line_1 = form.cleaned_data['address_line_1']
-            data.address_line_2 = form.cleaned_data['address_line_2']
+            data.Type = form.cleaned_data['Type']
+            data.address = form.cleaned_data['address']
             data.country = form.cleaned_data['country']
             data.state = form.cleaned_data['state']
             data.city = form.cleaned_data['city']
@@ -141,7 +147,9 @@ def payments(request):
 def cash_on_delivery(request):
     
     return render(request,'accounts/order_message.html')
+
 def order_complete(request):
+    user = request.user
     order_number = request.GET.get('order_number')
     transID = request.GET.get('payment_id')
     try:
@@ -165,3 +173,38 @@ def order_complete(request):
         return render(request,'orders/order_complete.html',context)
     except (Payment.DoesNotExist, Order.DoesNotExist):
      return redirect('home')
+ #invoice download   
+
+def Invoice(request,id):
+    if request.user.is_authenticated:
+
+        order = Order.objects.get(id=id, is_ordered=True)
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        products = OrderProduct.objects.filter(order_id=order.id)
+
+        subtotal = 0
+        quantity = 0
+        for i in ordered_products:
+            subtotal += i.product_price * i.quantity
+            quantity = quantity + i.quantity
+
+        template_path = 'orders/invoice.html'
+
+
+        context = {'order': order,
+            'ordered_products': ordered_products,
+            'order_number': order.order_number,
+            'subtotal': subtotal,
+            'quantity': quantity,
+            'product' : products
+            }
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Didpodition'] = 'filename = "Order invoice.pdf"'
+        template = get_template(template_path)
+        html = template.render(context)
+
+        pisa_status = pisa.CreatePDF(html,dest=response)
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>'+html+'<pre>')
+        return(response)

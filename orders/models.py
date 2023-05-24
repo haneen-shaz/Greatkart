@@ -31,8 +31,8 @@ class Order(models.Model):
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=50)
-    address_line_1 = models.CharField(max_length=50)
-    address_line_2 = models.CharField(max_length=50, blank=True)
+    Type = models.CharField(max_length=50)
+    address = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
@@ -44,13 +44,6 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-    # def full_name(self):
-    #     return f'{self.first_name} {self.last_name}'
-
-    # def full_address(self):
-    #     return f'{self.address_line_1} {self.address_line_2}'
 
     def __str__(self):
         return self.first_name

@@ -6,7 +6,9 @@
         <a class="list-group-item {% if '/accounts/' == request.path %}active{% endif %}" href="{% url 'dashboard' %}"> Dashboard </a>
         <a class="list-group-item {% if '/my_orders/' in request.path %}active{% endif %}" href="{% url 'my_orders' %}"> My Orders </a>
         <a class="list-group-item {% if '/edit_profile/' in request.path %}active{% endif %}" href="/accounts/edit_profile/"> Edit Profile </a>
+        <a class="list-group-item {% if '/address/' in request.path %}active{% endif %}" href="/accounts/addr/"> Address management </a>
         <a class="list-group-item {% if '/change_password/' in request.path %}active{% endif %}" href="/accounts/change_password/"> change password </a>
+        <a class="list-group-item {% if '/returnItem/' in request.path %}active{% endif %}" href="/accounts/returnItem/"> Return orders</a>
         <!-- <a class="list-group-item" href="#"> My Selling Items </a>
         <a class="list-group-item" href="#"> Received orders </a> -->
     </ul>

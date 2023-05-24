@@ -6,10 +6,12 @@ urlpatterns = [
     path('payments/', views.payments, name='payments'),
     path('orders/place_order/cod',views.cash_on_delivery,name='cod'),
     path('order_complete/', views.order_complete, name='order_complete'),
+    path('invoice/<int:id>',views.Invoice),
+      
 
 ]
 
 
 
 
-#     path('order_complete/', views.order_complete, name='order_complete'),
+

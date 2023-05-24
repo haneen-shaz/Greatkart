@@ -2,8 +2,11 @@ from django.shortcuts import render,redirect, get_object_or_404
 from .models import Cart, CartItem
 from store.models import Product,Variation
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+
+
+
+
 
 
 def _cart_id(request):
@@ -25,7 +28,7 @@ def add_cart(request, product_id):
                 try:
                     variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
                     product_variation.append(variation)
-                    # product_variation.append(variation)
+                
                 except:
                     pass   
     try:
@@ -131,8 +134,6 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         'grand_total': grand_total,
     }
     return render(request, 'store/checkout.html', context)
-
-
 
 
 
