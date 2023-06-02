@@ -69,7 +69,7 @@
       <div class="text-light row">
           <div class="col-md-3 col-6">
               <div class="p-3 card ">
-                  <a class="nav-link text-light" href="admin_users">
+                  <a class="nav-link text-light" href="/custom_admin/admins_home">
                       <div style="box-shadow: 0px 0px 15px black;" class=" card-body bg-danger">
                           <h4 class="card-title font-weight-bold">User</h4>
                           <p class="card-text font-weight-bold">{{user_count}}+</p>
@@ -79,7 +79,7 @@
           </div>
           <div class="col-md-3 col-6">
               <div class="p-3 card ">
-                  <a class="nav-link text-light" href="order_details">
+                  <a class="nav-link text-light" href="/custom_admin/order">
                       <div class="card-body bg-success" style="box-shadow: 0px 0px 15px black;">
                           <h4 class="card-title font-weight-bold">Orders</h4>
                           <p class="card-text font-weight-bold">{{order_count}}+</p>
@@ -89,7 +89,7 @@
           </div>
           <div class="col-md-3 col-6">
               <div class="p-3 card ">
-                  <a class="nav-link text-light " href="product_details">
+                  <a class="nav-link text-light " href="/custom_admin/product_details">
                       <div class="card-body bg-warning" style="box-shadow: 0px 0px 15px black;">
                           <h4 class="card-title font-weight-bold">Products</h4>
                           <p class="card-text font-weight-bold">{{product_count}}+</p>
@@ -98,8 +98,28 @@
               </div>
           </div>
           <div class="col-md-3 col-6">
+            <div class="p-3 card ">
+                <a class="nav-link text-light " href="/custom_admin/product_details">
+                    <div class="card-body bg-warning" style="box-shadow: 0px 0px 15px black;">
+                        <h4 class="card-title font-weight-bold">Categories</h4>
+                        <p class="card-text font-weight-bold">{{cat_count}}+</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="p-3 card ">
+              <a class="nav-link text-light" href="/custom_admin/order">
+                  <div style="box-shadow: 0px 0px 15px black;" class=" card-body bg-danger">
+                      <h4 class="card-title font-weight-bold">Ordered Products</h4>
+                      <p class="card-text font-weight-bold">{{ord_prd_count}}+</p>
+                  </div>
+              </a>
+          </div>
+      </div>
+          <div class="col-md-3 col-6">
               <div class="p-3 card  ">
-                  <a class="nav-link text-light" href="order_details">
+                  <a class="nav-link text-light" href="/custom_admin/SalesReport">
                       <div class="card-body bg-info " style="box-shadow: 0px 0px 15px black;">
                           <h4 class="card-title font-weight-bold ">Delivered</h4>
                           <p class="card-text font-weight-bold">{{deliverd_count}}+</p>
@@ -122,7 +142,7 @@
       var myChart1 = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: [{%for o in cart %}, '{{o.id}}', {% endfor %}],
+          labels: [{% for o in cart %}, '{{o.id}}', {% endfor %}],
       datasets: [{
         label: 'Grand Total',
         data: [{% for o in cart %}, '{{o.amount}}', {% endfor %}],

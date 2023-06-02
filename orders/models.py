@@ -1,8 +1,17 @@
 from django.db import models
 from accounts.models import Account
 from store.models import Product, Variation
+from django.utils import timezone
 
 
+class Coupon(models.Model):
+    code=models.CharField(max_length=50,unique=True)
+    discount=models.FloatField()
+    expiry_date=models.DateTimeField()
+
+    def is_valid(self):
+        return self.expiry_date>=timezone.now()
+    
 
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -44,6 +53,8 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    coupon = models.ForeignKey(Coupon, null=True, blank=True, on_delete=models.SET_NULL)
+
 
     def __str__(self):
         return self.first_name

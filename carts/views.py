@@ -3,11 +3,8 @@ from .models import Cart, CartItem
 from store.models import Product,Variation
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-
-
-
-
-
+from orders.models import Coupon
+from accounts.models import Address
 
 def _cart_id(request):
     cart = request.session.session_key
@@ -32,7 +29,7 @@ def add_cart(request, product_id):
                 except:
                     pass   
     try:
-            cart = Cart.objects.get(cart_id=_cart_id(request)) # get the cart using the cart_id present in the session
+        cart = Cart.objects.get(cart_id=_cart_id(request)) # get the cart using the cart_id present in the session
     except Cart.DoesNotExist:
             cart = Cart.objects.create(
                 cart_id = _cart_id(request)
@@ -56,10 +53,8 @@ def add_cart(request, product_id):
         )
         if len(product_variation) > 0:
                 cart_item.variations.clear()
-                cart_item.variations.add(*product_variation)
-            
-        cart_item.save()
-    
+                cart_item.variations.add(*product_variation)            
+        cart_item.save() 
 
     return redirect('cart')
 
@@ -76,8 +71,7 @@ def remove_cart(request, product_id):
             cart_item.delete()
     return redirect('cart')
 
-def remove_cart_item(request, product_id):
-   
+def remove_cart_item(request, product_id):   
     
     cart = Cart.objects.get(cart_id=_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
@@ -99,8 +93,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         tax = (2 * total)/100
         grand_total = total + tax
     except ObjectDoesNotExist:
-        pass #just ignore
-
+        pass
     context = {
         'total': total,
         'quantity': quantity,
@@ -112,6 +105,10 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 @login_required(login_url='login')
 def checkout(request, total=0, quantity=0, cart_items=None):
+    a = Address.objects.filter(type_address = 'Home',user = request.user.id)
+    address = list()
+    for a in a:
+         address.append(a)
     try:
         tax = 0
         grand_total = 0
@@ -125,13 +122,35 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         grand_total = total + tax
     except ObjectDoesNotExist:
         pass #just ignore
+    if request.method == 'POST':
+        code = request.POST['coupon-code']
+        try:
+            coupon = Coupon.objects.get(code = code)
+            discount = (grand_total*coupon.discount)/100
+            grand_total = grand_total-discount
+
+            total_discount = (total*coupon.discount)/100
+            total = total - total_discount
+
+            context = {
+                'id':coupon.id,
+                'total': total,
+                'quantity': quantity,
+                'cart_items': cart_items,
+                'tax': tax,
+                'grand_total': grand_total,
+                'address': address,
+            }
+            return render(request, 'store/checkout.html', context)
+        except:
+             pass
 
     context = {
         'total': total,
         'quantity': quantity,
         'cart_items': cart_items,
-        'tax'       : tax,
-        'grand_total': grand_total,
+        'tax': tax,
+        'address': address
     }
     return render(request, 'store/checkout.html', context)
 

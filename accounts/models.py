@@ -44,7 +44,7 @@ class Account(AbstractBaseUser):
     first_name      = models.CharField(max_length=50)
     last_name       = models.CharField(max_length=50)
     username        = models.CharField(max_length=50, unique=True)
-    email           = models.EmailField(max_length=100, unique=True)
+    email           = models.EmailField(max_length=100,unique=True)
     phone    = models.CharField(max_length=50)
 
     # required
@@ -53,7 +53,7 @@ class Account(AbstractBaseUser):
     is_admin        = models.BooleanField(default=False)
     is_staff        = models.BooleanField(default=False)
     is_active        = models.BooleanField(default=False)
-    is_superadmin        = models.BooleanField(default=False)
+    is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
@@ -86,10 +86,14 @@ class UserProfile(models.Model):
 
     def full_address(self):
         return f'{self.address_line_1} {self.address_line_2}'
+    
+#address
+
+
 class Address(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    type_address = models.CharField(max_length=50,unique=True)
+    type_address = models.CharField(max_length=50)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     email = models.EmailField(max_length=100, unique=False)
     phone = models.CharField(max_length=50)

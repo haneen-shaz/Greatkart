@@ -6,7 +6,8 @@ urlpatterns = [
     path("",views.admins_log),
     path('admins_login', views.admin_login, name='admins_login'),
     path('admins_home',views.admin_home),
-    # path('admins_delete/<int:id>',views.admins_delete,name='admins_delete'),
+    
+    
 
     path('product_details', views.product_details, name='product_details'),
     path('category', views.category_details, name='category'),
@@ -24,12 +25,14 @@ urlpatterns = [
     path('cat_upd/<int:id>',views.cat_update),
     path('new_category',views.new_category),
     path('delete_product',views.product_delete),
-    path('user_block/<int:id>',views.user_block,name='user_block'),
-    path('user_unblock/<int:id>',views.user_unblock,name='user_unblock'),
+   
     path('order_delete/<int:id>',views.order_delete,name = 'order_delete'),
     path('order_update/<int:id>',views.order_update,name='order_update'),
     path('ord_upd/<int:id>',views.order_upd),
     path('dashboard/',views.Dashboard),
+    path('SalesReport',views.SalesReport,name = 'sales report'),
+    path('sales_date_wise',views.sales_date_wise,name = 'sales_date_wise'),
+    path('sales_year_wise',views.sales_year_wise,name='sales_year_wise'),
     path('logout/',views.Logout)
     
     

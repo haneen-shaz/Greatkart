@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
+
+from accounts.forms import UserForm, UserProfileForm
 # from .forms import RegistrationForm,UserForm,UserProfileForm
 from .models import Account,UserProfile,Address
 from orders.models import Order, OrderProduct
@@ -227,7 +229,7 @@ def change_password(request):
     return render(request, 'accounts/change_password.html')
 def addr(request):
     if request.user.is_authenticated:
-        address=Address.objects.all()
+        address=Address.objects.filter(user = request.user.id)
         return render(request,"accounts/address.html",{'address':address})
 
 def add_address(request):
@@ -250,7 +252,7 @@ def add_address(request):
             address =Address.objects.create(user=user,first_name = first_name ,last_name= last_name,email= email, state=state,phone=phone,address_line_1 =address_line_1 ,address_line_2 =address_line_2 ,type_address=type_address,country=country,city=city )
             address.save()
 
-            return redirect(edit_profile)
+            return redirect(addr)
         return redirect(edit_profile)
 
 def address_add_page(request):

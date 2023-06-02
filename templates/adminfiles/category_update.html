@@ -2,41 +2,49 @@
 {% load static %}
 {%block content%}
 <section class="section-conten padding-y bg">
+<style>
+	.image-preview{
+		width: 100px;
+		min-height: 100px;
+		border: 2px solid whitesmoke;
+		margin-top: 15px;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		color: rgb(129, 126, 126);	
+	}
+	.image_preview_image
+	{
+		
+		width: 100%;
+	}
+
+</style>
 
 <div class="container">
 	<div class="row">
 	<main class="col-md-9">
 		<article class="card mt-5">
 		<header class="card-header">
-			<strong class="d-inline-block ">Update Category</strong>
-			
+			<strong class="d-inline-block">Update Category</strong>			
 		</header>
-		<div class="card-body">
-			
-			<div class="row">
-
-			
+		<div class="card-body">			
+			<div class="row">			
 			<div class="col-md-12">
 				<form action="/custom_admin/cat_update/{{category.id}}" method="POST" enctype="multipart/form-data">
-					{% csrf_token %}
-					
+					{% csrf_token %}					
 					<div class="form-group">
 						<label>Category name</label>
                         <input type="text" name="name" placeholder="" value="{{category.category_name}}" class="form-control" >					
-					</div><br>
-					<div class="form-group">
-						<label>Slug</label>
-                        <input type="text" name="slug" placeholder="" value="{{category.slug}}" class="form-control" >					
-					</div><br>                 
-                    <div class="form-group">
+					</div><br>           
 						<label>Upload Image</label>
-                        <input type="file" id="image1" name="image" class="form-control" />					
-					</div><br>
-                    <!-- <div class="form-outline mb-4 ">
-                        <label class="form-label" for="form3Example97">Images</label>
-                        <input type="file" id="myFile1" name="image" class="form-control form-control-lg" />
-                    </div>
-                    -->
+                        <input type="file" id="image1" name="image" value="{{category.cat_image.image_path}}" class="form-control"/>
+						<div class="image-preview" id="ImagePreview">							
+							<img src="{{category.cat_image.url}}" alt="preview image" class="image_preview_image">
+							<span class="image-preview__default_text"></span>
+						</div>
 					<button type="submit" class="btn btn-primary mt-4">Update</button>
 				</form>
 
@@ -54,5 +62,28 @@
 
 
 </section>
+<script>
+	const image1=document.getElementById('image1');
+	const previewContainer=document.getElementById('ImagePreview');
+	const PreviewImage=previewContainer.querySelector('.image_preview_image');
+	const Previewdefaulttext=document.querySelector('image-preview__default_text');
+	image1.addEventListener("change",function(){
+		const file=this.files[0];
+		console.log(file);
+		if(file){
+			const reader=new FileReader();
+
+	 reader.addEventListener("load",function(){
+		console.log(this);
+		PreviewImage.setAttribute("src",this.result);
+	 });
+	 reader.readAsDataURL(file);
+	}else{
+		PreviewImage.setAttribute("src",this.result);		
+	}
+
+	});	
+
+</script>
 
 {% endblock %}
